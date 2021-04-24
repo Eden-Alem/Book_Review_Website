@@ -1,0 +1,55 @@
+{% from 'form_helper.html' import displayField %}
+
+{% extends "layout.html" %}
+
+{% block head %}
+{{ super() }}
+<link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+
+<link rel="stylesheet" href="{{ url_for('static', filename='css/main.css') }}">
+<title>Sign Up-Excogitation</title>
+{% endblock %}
+
+{% block content %}
+
+   
+    <h1></h1>
+
+    
+
+    <form action="{{ url_for('signup') }}", method="POST">
+        <div class="login-wrap" >
+            <div class="login-html" style="background-color: #212529;">
+                <input id="tab-2" type="radio" name="tab" class="sign-up" checked><label for="tab-2" class="tab" style="border-color:#fec810;" >Sign Up</label>
+                <div class="login-form" style="background-color: #212529;">
+
+                    <div class="sign-up-htm" style="border-color:#fec810;">
+        
+                        {{ displayField(form.username, 'Username', autocomplete="off", autofocus=true) }}
+                        {{ displayField(form.email, 'Email Address') }}
+                        {{ displayField(form.password, 'Password') }}
+                        {{ displayField(form.confirm_password, 'Confirm Password') }}
+
+
+                        <div class="btn btn-primary text-uppercase " style="
+                        border-radius:35px; width: 100%; ">
+                            {{ form.submit_button(class_='btn btn-primary text-uppercase', style="color:black; padding:0.7rem; width: 100%; display:block;") }}
+
+                        </div>
+
+                        
+                        <div class="hr"></div>
+                        <div class="foot-lnk">
+                            <a href="./login">Already Member?</a>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+
+
+        {{ form.csrf_token }}
+    </form>
+    
+{% endblock %}

@@ -1,0 +1,157 @@
+{% from 'form_helper.html' import displayField %}
+
+{% extends "layout.html" %}
+
+{% block head %}
+{{ super() }}
+<link rel="stylesheet" href="{{ url_for('static', filename='css/main.css') }}">
+<title>Details-Excogitation</title>
+{% endblock %}
+
+{% block content %}
+
+<nav class="navbar navbar-expand-lg navbar-dark fixed-top" id="mainNav" style="background-color: #212529;">
+    <div class="container">
+        <a class="navbar-brand js-scroll-trigger" href="{{ url_for('index') }}"><h3>Excogitation</h3></a>
+        <button class="navbar-toggler navbar-toggler-right" type="button" data-toggle="collapse" data-target="#navbarResponsive" aria-controls="navbarResponsive" aria-expanded="false" aria-label="Toggle navigation">
+            Menu
+            <i class="fas fa-bars ml-1"></i>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarResponsive">
+            <ul class="navbar-nav text-uppercase ml-auto">
+                <li class="nav-item"><a class="nav-link js-scroll-trigger" href="{{ url_for('logout') }}">{{ username }} <i class="fas fa-sign-out-alt"></i></a></li>
+            </ul>
+        </div>
+    </div>
+</nav>  
+
+    <div class="pt-5 mt-5">
+
+        <div class="card bg-light mb-3 mt-5 ml-5" style="max-width: 50%">
+            <div class="card-header" style="color: #fec810; background-color: #212529;">{{ value[1] }}</div>
+            <div class="card-body" style="color: white; background-color: #212529;">
+              <h5 class="card-title">Author: {{ value[2] }}</h5>
+              <p class="card-text">
+                ISBN: {{ value[0] }} <br>
+                Published in {{ value[3] }}
+              </p>
+            </div>
+          </div>
+
+
+</div>
+    
+        
+        {% for element in elements %}
+        <div class="mt-5">
+            <div class="card bg-light mb-3 ml-5" style="max-width: 90%">
+
+            <div class="card-header " style="display: flex;">
+                <div style="flex: 1;">{{ element[1] }}</div>
+                <div style="margin-right: 20px;">
+                    <a href="{{ url_for('edit', type=isbn) }}" style="color: black;"><i class="fa fa-edit"></i></a> &nbsp;&nbsp;
+                    <a href="{{ url_for('delete', type=isbn) }}" onclick="return confirm('Are you sure you want to delete this review?');" style="color: black;"><i class="fa fa-trash"></i></a>
+                </div>
+            </div>
+            <div class="card-body">
+              <h5 class="card-title">ISBN: {{ element[0] }}</h5>
+              <p class="card-text">
+                Review: {{ element[3] }} <br>
+                <small> Rated: {{ element[2] }} </small>
+              </p>
+            </div>
+            </div>
+        </div>
+        {% endfor %}
+        
+        {% for reviewed in listOfReviews[0] %}
+            <div class="mt-5">
+                <div class="card bg-light mb-3  ml-5" style="max-width: 90%">
+    
+                <div class="card-header " >{{ reviewed[1] }}</div>
+                <div class="card-body">
+                  <h5 class="card-title">ISBN: {{ reviewed[0] }}</h5>
+                  <p class="card-text">
+                    Review: {{ reviewed[3] }} <br>
+                    <small> Rated: {{ reviewed[2] }} </small>
+                  </p>
+                </div>
+                </div>
+            </div>
+            
+        {% endfor %} 
+
+
+    
+            
+            <form action="{{ url_for('details', type=isbn) }}",  method="POST">
+
+                {% if elements != []: %}
+    
+                    <!-- <h3>This is right :)</h3> -->
+            
+                {% else  %} 
+                <section class="page-section mt-5" id="contact">
+                    <div class="container">
+                <div class="text-center">
+                    <h2 class="section-heading text-uppercase">Review Book</h2>
+                    <h3 class="section-subheading text-muted">Your thoughts matter!</h3>
+                </div>
+                <div class="row align-items-stretch mb-5">
+                    
+                    <div class="col-md-12">
+                        <div class="form-group form-group-textarea mb-md-0 ">
+                            {{ displayField(form.review, "Your review", class="form-control") }}
+
+                            <h5 style="color: white;">Rate this book: <hr> {{ displayField(form.rate, min=1, max=5, oninput="outputUpdate(value)")  }}</h5>
+                            <output style="color: white;" for="rate" id="selected-age" step="0.01" type="number">{{ form.rate.data }}</output>  
+                            <p class="help-block text-danger"></p>
+                        </div>
+                    </div>
+                </div>
+                <div class="text-center">
+                    {{ form.submit_button(class_='button btn btn-primary btn-xl text-uppercase') }}
+                </div>
+
+                {{ form.csrf_token }}
+    
+                {% endif  %}
+            </div>
+        </section>
+            </form>
+        
+    
+<!-- Footer-->
+<footer class="footer py-4 mt-auto">
+    <div class="container">
+        <div class="row align-items-center">
+            <div class="col-lg-4 text-lg-left">Copyright © Excogitation 2020</div>
+            <div class="col-lg-4 my-3 my-lg-0">
+                <a class="btn btn-dark btn-social mx-2" href="#!"><i class="fab fa-twitter"></i></a>
+                <a class="btn btn-dark btn-social mx-2" href="#!"><i class="fab fa-facebook-f"></i></a>
+                <a class="btn btn-dark btn-social mx-2" href="#!"><i class="fab fa-linkedin-in"></i></a>
+            </div>
+            <div class="col-lg-4 text-lg-right">
+                <a class="mr-3" href="#!">Privacy Policy</a>
+                <a href="#!">Terms of Use</a>
+            </div>
+        </div>
+    </div>
+</footer>
+
+
+ <!-- Bootstrap core JS-->
+ <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+ <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.5.3/dist/js/bootstrap.bundle.min.js"></script>
+ <!-- Third party plugin JS-->
+ <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-easing/1.4.1/jquery.easing.min.js"></script>
+
+   
+{% endblock %}
+{% block script %}
+    <script>
+    function outputUpdate(rate) {
+        document.querySelector('#selected-age').value =  Math.round(rate * 100)/100;
+    }
+    </script>
+{% endblock %}
